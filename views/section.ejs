@@ -311,35 +311,16 @@
     });
 
     // 🗑 Suppression
-document.querySelectorAll('.deleteBtn').forEach(btn => {
-  btn.addEventListener('click', async e => {
-    
-    // 1. Premier message de confirmation
-    if (!confirm('Voulez-vous vraiment supprimer cette section ?')) return;
-
-    // 2. Message d'avertissement concernant le matériel
-    // On rappelle à l'utilisateur la règle de gestion de l'APC
-    if (!confirm('⚠️ Attention : Assurez-vous d\'avoir transféré tout le matériel vers une autre section avant de confirmer. Continuer la suppression ?')) return;
-
-    const tr = e.target.closest('tr');
-    const id = tr.dataset.id;
-
-    try {
-      const res = await fetch(`/section/delete/${id}`, { method: 'DELETE' });
-
-      if (res.ok) {
-        tr.remove();
-        alert('🗑️ Section supprimée avec succès !');
-      } else {
-        // Si le serveur renvoie une erreur (par exemple parce qu'il reste du matériel)
-        const errorData = await res.json();
-        alert('❌ Erreur : ' + (errorData.message || 'Impossible de supprimer cette section. Vérifiez qu\'elle est bien vide.'));
-      }
-    } catch (err) {
-      alert('❌ Erreur de connexion au serveur.');
-    }
-  });
-});
+    document.querySelectorAll('.deleteBtn').forEach(btn=>{
+      btn.addEventListener('click', async e=>{
+        if(!confirm('Supprimer cette section ?')) return;
+        const tr = e.target.closest('tr');
+        const id = tr.dataset.id;
+        const res = await fetch(`/section/delete/${id}`, {method:'DELETE'});
+        if(res.ok){ tr.remove(); alert('🗑️ Section supprimée !'); }
+        else alert('❌ Erreur !');
+      });
+    });
   </script>
   <script>
   const nomInput = document.getElementById('nomSectionInput');
